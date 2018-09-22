@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Timeline from "./Timeline";
 import { BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
-import PrivateRoute from "./PrivateRoute";
+import PrivateRoute from "../presentational/PrivateRoute";
 import Login from "./Login";
 
 class App extends Component {

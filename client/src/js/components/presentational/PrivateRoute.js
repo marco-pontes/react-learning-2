@@ -5,7 +5,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route
         {...rest}
         render={props =>
-            sessionStorage.isAuthenticated === 'true' ? (
+            sessionStorage.getItem('authenticated') === 'true' ? (
                 <Component {...props} />
             ) : (
                 <Redirect
