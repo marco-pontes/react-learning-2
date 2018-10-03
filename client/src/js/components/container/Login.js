@@ -3,8 +3,8 @@ import { Redirect } from "react-router-dom";
 import AuthService from "../../services/AuthService";
 
 class Login extends Component {
-    constructor () {
-        super();
+    constructor (props) {
+        super(props);
         this.submit = this.submit.bind(this);
         this.authService = new AuthService();
         this.state = { mensagem: '', isAuthenticated: sessionStorage.getItem('authenticated') === 'true'};

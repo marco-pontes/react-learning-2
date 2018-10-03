@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Logout from './Logout';
 
 class Header extends Component {
 
@@ -23,6 +24,10 @@ class Header extends Component {
                                 {/*                 ♥ */}
                                 {/* Quem deu like nas minhas fotos */}
                             </a>
+
+                        </li>
+                        <li className="header-nav-item">
+                            <Logout />
                         </li>
                     </ul>
                 </nav>

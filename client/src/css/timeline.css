@@ -19,7 +19,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 7vh;
+    height: 57px;
     border-bottom: 2px solid #aaa;
     position: fixed;
     top: 0;
@@ -76,10 +76,15 @@ body {
     list-style: none
 }
 
+.header-nav-item {
+    display: inline;
+}
+
 .header-nav-item a {
     text-decoration: none;
     color: #069;
     font-size: 3em;
+    font-size: 20px;
 }
 
 .header-nav-item a:hover{
