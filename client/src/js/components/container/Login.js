@@ -7,7 +7,9 @@ class Login extends Component {
         super(props);
         this.submit = this.submit.bind(this);
         this.authService = new AuthService();
-        this.state = { mensagem: '', isAuthenticated: sessionStorage.getItem('authenticated') === 'true'};
+        const params = new URLSearchParams(props.location.search);
+        const msgParam = params.get('msg');
+        this.state = { mensagem: msgParam, isAuthenticated: sessionStorage.getItem('authenticated') === 'true'};
     }
 
     submit(event) {

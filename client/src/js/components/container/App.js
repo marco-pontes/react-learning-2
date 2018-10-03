@@ -1,12 +1,31 @@
 import React, { Component } from "react";
 import Timeline from "./Timeline";
 import { BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
-import PrivateRoute from "../presentational/PrivateRoute";
 import Login from "./Login";
 
 class App extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        this.verifyAuth = this.verifyAuth.bind(this);
+        this.renderRoute = this.renderRoute.bind(this);
+    }
+
+    verifyAuth() {
+        debugger;
+        return sessionStorage.getItem('authenticated') === 'true';
+    }
+
+    renderRoute() {
+        debugger;
+        if (this.verifyAuth() || this.props.match.params.login) {
+            return (
+                <Timeline />
+            );
+        } else {
+            return (
+                <Redirect to="/?msg=Você precisa estar logado para acessar a Timeline!"/>
+            );
+        }
     }
 
     render() {
@@ -16,7 +35,7 @@ class App extends Component {
                     <Router>
                         <Switch>
                             <Route path="/login" component={Login} />
-                            <PrivateRoute path="/timeline" component={Timeline} />
+                            <Route path="/timeline/:login?" render={this.renderRoute}/>
                             <Route component={NoMatch} />
                         </Switch>
                     </Router>
