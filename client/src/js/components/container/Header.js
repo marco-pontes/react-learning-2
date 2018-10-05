@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import Logout from './Logout';
+import { Link } from "react-router-dom";
 
 class Header extends Component {
 
     render(){
         return (
             <header className="header container">
-                <h1 className="header-logo">
-                    Instalura
-                </h1>
-
+                <Link to="/timeline">
+                    <h1 className="header-logo">
+                        Instalura
+                    </h1>
+                </Link>
                 <form className="header-busca">
                     <input type="text" name="search" placeholder="Pesquisa" className="header-busca-campo"/>
                     <input type="submit" value="Buscar" className="header-busca-submit"/>

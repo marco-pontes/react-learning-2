@@ -11,15 +11,13 @@ class App extends Component {
     }
 
     verifyAuth() {
-        debugger;
         return sessionStorage.getItem('authenticated') === 'true';
     }
 
-    renderRoute() {
-        debugger;
-        if (this.verifyAuth() || this.props.match.params.login) {
+    renderRoute(props) {
+        if (this.verifyAuth() || props.match.params.login) {
             return (
-                <Timeline />
+                <Timeline login={props.match.params.login ? props.match.params.login : undefined} />
             );
         } else {
             return (

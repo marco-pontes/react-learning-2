@@ -10,12 +10,20 @@ class Timeline extends Component {
         this.timelineService = new TimelineService();
     }
 
-    componentDidMount(){
+    loadTimeline(nextProps) {
         const token = sessionStorage.getItem('auth-token');
-        this.timelineService.fotos(token)
+        this.timelineService.fotos(token, nextProps.login)
             .then(fotos => {
                 this.setState({fotos:fotos});
             });
+    }
+
+    componentDidMount(){
+        this.loadTimeline(this.props);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.loadTimeline(nextProps);
     }
 
     render(){
