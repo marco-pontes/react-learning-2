@@ -23,6 +23,18 @@ class TimelineService {
                 throw new Error('Erro ao listar fotos');
             });
     }
+
+    like(token, fotoId) {
+        let url = `${BASE_URL}/fotos/${fotoId}/like?X-AUTH-TOKEN=${token}`;
+        return this.httpService.post(url, { })
+            .then(resposta => {
+                return resposta;
+            })
+            .catch(erro => {
+                console.log(erro);
+                throw new Error('Erro ao dar like');
+            });
+    }
 }
 
 export default TimelineService;

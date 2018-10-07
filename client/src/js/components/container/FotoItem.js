@@ -1,11 +1,31 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
+import TimelineService from "../../services/TimelineService";
 
 class FotoAtualizacoes extends Component {
+
+    constructor(props) {
+        super(props);
+        this.like = this.like.bind(this);
+        this.timelineService = new TimelineService();
+        this.state = { liked : props.foto.likeada };
+    }
+
+    like(event) {
+        event.preventDefault();
+        let token = sessionStorage.getItem('auth-token');
+        this.timelineService.like(token, this.props.foto.id)
+            .then((liker) => {
+                this.setState({ liked : !this.state.liked });
+                console.log(liker);
+            })
+            .catch((msg) => console.log(msg));
+    }
+
     render(){
         return (
             <section className="fotoAtualizacoes">
-                <a href="#" className="fotoAtualizacoes-like">Likar</a>
+                <a href="#" onClick={this.like} className={this.state.liked ? 'fotoAtualizacoes-like-ativo' : 'fotoAtualizacoes-like'}>Likar</a>
                 <form className="fotoAtualizacoes-form">
                     <input type="text" placeholder="Adicione um comentário..." className="fotoAtualizacoes-form-campo"/>
                     <input type="submit" value="Comentar!" className="fotoAtualizacoes-form-submit"/>
@@ -78,7 +98,7 @@ class FotoItem extends Component {
                 <FotoHeader foto={this.props.foto}/>
                 <img alt="foto" className="foto-src" src={ this.props.foto.urlFoto } />
                 <FotoInfo foto={this.props.foto} />
-                <FotoAtualizacoes/>
+                <FotoAtualizacoes foto={this.props.foto} />
             </div>
         );
     }

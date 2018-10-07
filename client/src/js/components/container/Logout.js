@@ -9,7 +9,7 @@ class Logout extends Component {
 
     onClick() {
         sessionStorage.setItem('authenticated', "");
-        sessionStorage.setItem('authenticated', "");
+        sessionStorage.setItem('auth-token', "");
         this.props.history.push("/login")
     }
 
