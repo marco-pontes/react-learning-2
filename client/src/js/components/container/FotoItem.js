@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
+import PubSub from 'pubsub-js';
 import TimelineService from "../../services/TimelineService";
 
 class FotoAtualizacoes extends Component {
@@ -17,6 +18,7 @@ class FotoAtualizacoes extends Component {
         this.timelineService.like(token, this.props.foto.id)
             .then((liker) => {
                 this.setState({ liked : !this.state.liked });
+                PubSub.publish('atualiza-liker', { fotoId: this.props.foto.id, liker });
                 console.log(liker);
             })
             .catch((msg) => console.log(msg));
@@ -37,13 +39,35 @@ class FotoAtualizacoes extends Component {
 }
 
 class FotoInfo extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = { likers: this.props.foto.likers };
+    }
+
+    componentWillMount() {
+        PubSub.subscribe('atualiza-liker', (topico, { fotoId, liker }) => {
+            if (fotoId === this.props.foto.id) {
+                let possibleLiker = this.state.likers.find((existingLiker) => existingLiker.login === liker.login);
+                if(possibleLiker === undefined) {
+                    const newLikers = this.state.likers.concat(liker);
+                    this.setState({ likers: newLikers });
+                } else {
+                    const newLikers = this.state.likers.filter((existingLiker) => existingLiker.login !== possibleLiker.login);
+                    this.setState({ likers: newLikers });
+                }
+            }
+        });
+    }
+
     render(){
         return (
             <div className="foto-info">
                 <div className="foto-info-likes">
 
                     {
-                        this.props.foto.likers.map((liker) => {
+                        this.state.likers.map((liker) => {
+
                             return <Link to={`/timeline/${liker.login}`} >{liker.login}, </Link>;
                         })
                     }
