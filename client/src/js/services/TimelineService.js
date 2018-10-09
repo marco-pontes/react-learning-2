@@ -35,6 +35,18 @@ class TimelineService {
                 throw new Error('Erro ao dar like');
             });
     }
+
+    comment(token, fotoId, comment) {
+        let url = `${BASE_URL}/fotos/${fotoId}/comment?X-AUTH-TOKEN=${token}`;
+        return this.httpService.post(url, { texto: comment })
+            .then(resposta => {
+                return resposta;
+            })
+            .catch(erro => {
+                console.log(erro);
+                throw new Error('Erro ao dar like');
+            });
+    }
 }
 
 export default TimelineService;
