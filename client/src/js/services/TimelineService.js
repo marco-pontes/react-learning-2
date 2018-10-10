@@ -47,6 +47,18 @@ class TimelineService {
                 throw new Error('Erro ao dar like');
             });
     }
+
+    search(searchTerm) {
+        let url = `${BASE_URL}/public/fotos/${searchTerm}`;
+        return this.httpService.get(url)
+            .then(resposta => {
+                return resposta;
+            })
+            .catch(erro => {
+                console.log(erro);
+                throw new Error('Erro ao pesquisar');
+            });
+    }
 }
 
 export default TimelineService;

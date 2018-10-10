@@ -71,7 +71,6 @@ class FotoInfo extends Component {
         });
         PubSub.subscribe('novos-comentarios', (topic, { fotoId, comment }) => {
             if(fotoId === this.props.foto.id) {
-                debugger;
                 const comments = this.state.comments.concat(comment);
                 this.setState({comments});
                 console.log(comment);

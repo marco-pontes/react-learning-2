@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PubSub from "pubsub-js";
 import FotoItem from './FotoItem';
 import Header from "./Header";
 import TimelineService from "../../services/TimelineService";
@@ -20,6 +21,10 @@ class Timeline extends Component {
 
     componentDidMount(){
         this.loadTimeline(this.props);
+        PubSub.subscribe('timeline', (topic, fotos) => {
+            console.log(fotos);
+            this.setState({fotos: fotos});
+        });
     }
 
     componentWillReceiveProps(nextProps) {

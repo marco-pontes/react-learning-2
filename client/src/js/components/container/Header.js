@@ -1,8 +1,23 @@
 import React, { Component } from 'react';
 import Logout from './Logout';
+import PubSub from 'pubsub-js';
 import { Link } from "react-router-dom";
 
+import TimelineService from "../../services/TimelineService";
+
 class Header extends Component {
+
+    constructor(props) {
+        super(props);
+        this.search = this.search.bind(this);
+        this.timelineService = new TimelineService();
+    }
+
+    search(event) {
+        event.preventDefault();
+        this.timelineService.search(this.searchField.value)
+            .then(fotos => PubSub.publish('timeline', fotos));
+    }
 
     render(){
         return (
@@ -12,8 +27,8 @@ class Header extends Component {
                         Instalura
                     </h1>
                 </Link>
-                <form className="header-busca">
-                    <input type="text" name="search" placeholder="Pesquisa" className="header-busca-campo"/>
+                <form className="header-busca" onSubmit={this.search}>
+                    <input type="text" name="search" placeholder="Pesquisa" ref={input => this.searchField = input} className="header-busca-campo"/>
                     <input type="submit" value="Buscar" className="header-busca-submit"/>
                 </form>
 
