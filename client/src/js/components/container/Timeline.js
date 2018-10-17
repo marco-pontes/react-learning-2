@@ -10,6 +10,8 @@ class Timeline extends Component {
         super();
         this.state = {fotos:[]};
         this.timelineService = new TimelineService();
+        this.like = this.like.bind(this);
+        this.comment = this.comment.bind(this);
     }
 
     loadTimeline(nextProps) {
@@ -26,10 +28,51 @@ class Timeline extends Component {
             console.log(fotos);
             this.setState({fotos: fotos});
         });
+
+        PubSub.subscribe('atualiza-liker', (topico, { fotoId, liker }) => {
+            liker = JSON.parse(liker);
+            const fotoAchada = this.state.fotos.find(foto => foto.id === fotoId);
+            fotoAchada.likeada = !fotoAchada.likeada;
+            let possibleLiker = fotoAchada.likers.find((existingLiker) => existingLiker.login === liker.login);
+            if(possibleLiker === undefined) {
+                fotoAchada.likers.push(liker);
+            } else {
+                const newLikers = fotoAchada.likers.filter((existingLiker) => existingLiker.login !== possibleLiker.login);
+                fotoAchada.likers = newLikers;
+            }
+            this.setState({ fotos: this.state.fotos });
+        });
+
+        PubSub.subscribe('novos-comentarios', (topic, { fotoId, comment }) => {
+            comment = JSON.parse(comment);
+            const fotoAchada = this.state.fotos.find(foto => foto.id === fotoId);
+            fotoAchada.comentarios.push(comment);
+            this.setState({ fotos: this.state.fotos });
+            console.log(comment);
+        });
     }
 
     componentWillReceiveProps(nextProps) {
         this.loadTimeline(nextProps);
+    }
+
+    like (fotoId) {
+        let token = sessionStorage.getItem('auth-token');
+        this.timelineService.like(token, fotoId)
+            .then((liker) => {
+                PubSub.publish('atualiza-liker', { fotoId, liker });
+                console.log(liker);
+            })
+            .catch((msg) => console.log(msg));
+    }
+
+    comment(fotoId, comment){
+        let token = sessionStorage.getItem('auth-token');
+        this.timelineService.comment(token, fotoId, comment)
+            .then((comment)  => {
+                PubSub.publish('novos-comentarios', { fotoId, comment });
+            })
+            .catch();
     }
 
     render(){
@@ -42,7 +85,16 @@ class Timeline extends Component {
                             transitionEnterTimeout={500}
                             transitionLeaveTimeout={300}
                         >
-                            { this.state.fotos.map(foto => <FotoItem key={foto.id} foto={foto}/>) }
+                            { this.state.fotos.map(foto => {
+                                return (
+                                    <FotoItem
+                                        key={foto.id}
+                                        foto={foto}
+                                        comment={this.comment}
+                                        like={this.like}
+                                    />
+                                );
+                            }) }
                         </CSSTransitionGroup>
                    </div>
                </div>
