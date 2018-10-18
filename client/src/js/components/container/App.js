@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import Timeline from "./Timeline";
 import { BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
 import Login from "./Login";
+import TimelineStore from "../../stores/TimelineStore";
+
+const timelineStore = new TimelineStore();
 
 class App extends Component {
     constructor(props) {
@@ -17,7 +20,7 @@ class App extends Component {
     renderRoute(props) {
         if (this.verifyAuth() || props.match.params.login) {
             return (
-                <Timeline login={props.match.params.login ? props.match.params.login : undefined} />
+                <Timeline login={props.match.params.login ? props.match.params.login : undefined} store={timelineStore} />
             );
         } else {
             return (

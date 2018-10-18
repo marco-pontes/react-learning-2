@@ -1,9 +1,9 @@
-import HttpService from './HttpService';
+import HttpService from '../services/HttpService';
 import PubSub from "pubsub-js";
 
 let BASE_URL = 'http://localhost:8080/api';
 
-class TimelineService {
+class TimelineStore {
     constructor() {
         this.httpService = new HttpService();
         this.fotos = [];
@@ -68,8 +68,9 @@ class TimelineService {
     search(searchTerm) {
         let url = `${BASE_URL}/public/fotos/${searchTerm}`;
         return this.httpService.get(url)
-            .then(resposta => {
-                return resposta;
+            .then(fotosJSON => {
+                this.fotos = fotosJSON
+                PubSub.publish('timeline', this.fotos);
             })
             .catch(erro => {
                 console.log(erro);
@@ -84,4 +85,4 @@ class TimelineService {
     }
 }
 
-export default TimelineService;
+export default TimelineStore;

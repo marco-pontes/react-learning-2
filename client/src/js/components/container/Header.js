@@ -1,22 +1,17 @@
 import React, { Component } from 'react';
 import Logout from './Logout';
-import PubSub from 'pubsub-js';
 import { Link } from "react-router-dom";
-
-import TimelineService from "../../services/TimelineService";
 
 class Header extends Component {
 
     constructor(props) {
         super(props);
         this.search = this.search.bind(this);
-        this.timelineService = new TimelineService();
     }
 
     search(event) {
         event.preventDefault();
-        this.timelineService.search(this.searchField.value)
-            .then(fotos => PubSub.publish('timeline', fotos));
+        this.props.store.search(this.searchField.value);
     }
 
     render(){
