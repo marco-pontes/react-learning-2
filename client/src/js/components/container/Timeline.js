@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { CSSTransitionGroup } from 'react-transition-group'
 import FotoItem from './FotoItem';
 import Header from "./Header";
+import TimelineService from "../../services/TimelineService";
 
 class Timeline extends Component {
     constructor() {
@@ -13,14 +14,14 @@ class Timeline extends Component {
 
     loadTimeline(nextProps) {
         const token = sessionStorage.getItem('auth-token');
-        this.props.store.carregaFotos(token, nextProps.login);
+        this.props.store.dispatch(TimelineService.carregaFotos(token, nextProps.login));
     }
 
     componentDidMount(){
         this.loadTimeline(this.props);
-        this.props.store.subscribe((fotos) => {
-            console.log(fotos);
-            this.setState({fotos: fotos});
+        this.props.store.subscribe(() => {
+            console.log(this.props.store.getState());
+            this.setState({ fotos: this.props.store.getState() });
         });
     }
 
@@ -30,12 +31,12 @@ class Timeline extends Component {
 
     like (fotoId) {
         let token = sessionStorage.getItem('auth-token');
-        this.props.store.like(token, fotoId);
+        this.props.store.dispatch(TimelineService.like(token, fotoId));
     }
 
     comment(fotoId, comment){
         let token = sessionStorage.getItem('auth-token');
-        this.props.store.comment(token, fotoId, comment);
+        this.props.store.dispatch(TimelineService.comenta(token, fotoId, comment));
     }
 
     render(){

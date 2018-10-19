@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Logout from './Logout';
 import { Link } from "react-router-dom";
+import TimelineService from "../../services/TimelineService";
 
 class Header extends Component {
 
@@ -11,7 +12,7 @@ class Header extends Component {
 
     search(event) {
         event.preventDefault();
-        this.props.store.search(this.searchField.value);
+        this.props.store.dispatch(TimelineService.search(this.searchField.value));
     }
 
     render(){

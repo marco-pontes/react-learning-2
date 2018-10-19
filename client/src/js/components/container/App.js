@@ -1,10 +1,12 @@
 import React, { Component } from "react";
+import { createStore, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk';
 import Timeline from "./Timeline";
 import { BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
 import Login from "./Login";
-import TimelineStore from "../../stores/TimelineStore";
+import {timeline} from "../../reducers/timeline";
 
-const timelineStore = new TimelineStore();
+const store = createStore(timeline, applyMiddleware(thunkMiddleware));
 
 class App extends Component {
     constructor(props) {
@@ -20,7 +22,7 @@ class App extends Component {
     renderRoute(props) {
         if (this.verifyAuth() || props.match.params.login) {
             return (
-                <Timeline login={props.match.params.login ? props.match.params.login : undefined} store={timelineStore} />
+                <Timeline login={props.match.params.login ? props.match.params.login : undefined} store={store} />
             );
         } else {
             return (
