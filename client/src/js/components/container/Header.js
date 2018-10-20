@@ -8,6 +8,13 @@ class Header extends Component {
     constructor(props) {
         super(props);
         this.search = this.search.bind(this);
+        this.state = { mensagem : '' };
+    }
+
+    componentDidMount() {
+        this.props.store.subscribe(() => {
+           this.setState({ mensagem: this.props.store.getState().header });
+        });
     }
 
     search(event) {
@@ -28,7 +35,7 @@ class Header extends Component {
                     <input type="submit" value="Buscar" className="header-busca-submit"/>
                 </form>
 
-
+                <span>{this.state.mensagem}</span>
                 <nav>
                     <ul className="header-nav">
                         <li className="header-nav-item">

@@ -1,4 +1,5 @@
 import HttpService from '../services/HttpService';
+import {comentario, like, listagem, notifica} from '../actions/actionCreator';
 
 let BASE_URL = 'http://localhost:8080/api';
 
@@ -16,7 +17,7 @@ class TimelineService {
             }
             return httpService.get(url)
                 .then(fotosJSON => {
-                    dispatch({ type: 'LISTAGEM', fotos: fotosJSON });
+                    dispatch(listagem(fotosJSON));
                 })
                 .catch(erro => {
                     console.log(erro);
@@ -31,7 +32,7 @@ class TimelineService {
             return httpService.post(url, {})
                 .then(resposta => JSON.parse(resposta))
                 .then(liker => {
-                    dispatch({type: 'LIKE', fotoId, liker});
+                    dispatch(like(fotoId, liker));
                 })
                 .catch(erro => {
                     console.log(erro);
@@ -46,7 +47,7 @@ class TimelineService {
             return httpService.post(url, {texto: comment})
                 .then(resposta => JSON.parse(resposta))
                 .then(commentObject => {
-                    dispatch({ type: 'COMENTARIO', fotoId, comentario: commentObject })
+                    dispatch(comentario(fotoId, commentObject))
                 })
                 .catch(erro => {
                     console.log(erro);
@@ -60,7 +61,12 @@ class TimelineService {
             let url = `${BASE_URL}/public/fotos/${searchTerm}`;
             return httpService.get(url)
                 .then(fotosJSON => {
-                    dispatch({type: 'LISTAGEM', fotos: fotosJSON });
+                    if(fotosJSON.length === 0) {
+                        dispatch(notifica('Não foi possível encontrar o usuário'));
+                    } else {
+                        dispatch(notifica(''));
+                    }
+                    dispatch(listagem(fotosJSON));
                 })
                 .catch(erro => {
                     console.log(erro);

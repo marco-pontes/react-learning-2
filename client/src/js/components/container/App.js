@@ -1,12 +1,14 @@
 import React, { Component } from "react";
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import Timeline from "./Timeline";
 import { BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
 import Login from "./Login";
 import {timeline} from "../../reducers/timeline";
+import {header} from "../../reducers/header";
 
-const store = createStore(timeline, applyMiddleware(thunkMiddleware));
+const reducers = combineReducers({timeline, header});
+const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
 class App extends Component {
     constructor(props) {

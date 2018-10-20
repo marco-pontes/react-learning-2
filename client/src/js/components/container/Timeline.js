@@ -21,7 +21,7 @@ class Timeline extends Component {
         this.loadTimeline(this.props);
         this.props.store.subscribe(() => {
             console.log(this.props.store.getState());
-            this.setState({ fotos: this.props.store.getState() });
+            this.setState({ fotos: this.props.store.getState().timeline });
         });
     }
 
