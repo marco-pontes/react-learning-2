@@ -1,14 +1,8 @@
 import React, { Component } from "react";
-import { createStore, applyMiddleware, combineReducers } from 'redux';
-import thunkMiddleware from 'redux-thunk';
 import Timeline from "./Timeline";
 import { BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
+import PropTypes from 'prop-types';
 import Login from "./Login";
-import {timeline} from "../../reducers/timeline";
-import {header} from "../../reducers/header";
-
-const reducers = combineReducers({timeline, header});
-const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
 class App extends Component {
     constructor(props) {
@@ -24,7 +18,7 @@ class App extends Component {
     renderRoute(props) {
         if (this.verifyAuth() || props.match.params.login) {
             return (
-                <Timeline login={props.match.params.login ? props.match.params.login : undefined} store={store} />
+                <Timeline login={props.match.params.login ? props.match.params.login : undefined} store={this.context.store} />
             );
         } else {
             return (
@@ -48,6 +42,10 @@ class App extends Component {
             </div>
         );
     }
+}
+
+App.contextTypes = {
+    store: PropTypes.instanceOf(Object).isRequired
 }
 
 const NoMatch = (props) => (
